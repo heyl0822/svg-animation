@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <title>Logo Animation</title>
+  </head>
+  
+  <body>
+    <div class="svg-container">
+      <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+           viewBox="0 0 1000 1000" style="enable-background:new 0 0 1000 1000;" xml:space="preserve">
+        <line class="st0" x1="440" y1="745.3" x2="500" y2="745.3"/>
+        <path class="st0" d="M300.5,690H365c66.3,0,120-53.7,120-120v-0.7c0-66.3-53.7-120-120-120l-64.5,0.7c-16.6,
+                                            0-30,13.4-30,30v370H270H150V150h700v700l-350-0.1c-16.6,0-30-13.4-30-30c0,0,0-120,0-120"/>
+      </svg>
+    </div>
+  </body>
+  <script>
+    var distancePerPoint = 8;
+    var drawFPS          = 60;
+
+    var path = document.querySelector('path'), line = document.querySelector('line');
+    var pathLength = path.getTotalLength(), lineLength = dist(line.x1.baseVal.value, line.x2.baseVal.value,
+               line.y1.baseVal.value, line.y2.baseVal.value);
+    var length = 0, timer;
+    
+    start();
+    
+    function start() {
+      timer = setInterval(increasePathLength,100/drawFPS);
+      line.style.strokeDasharray = [0,lineLength].join(' ');
+    }
+    
+    function increaseLineLength(){
+      length += distancePerPoint;
+      line.style.strokeDasharray = [length,lineLength].join(' ');
+      if (length >= lineLength) clearInterval(timer);
+    }
+    
+    function increasePathLength(){
+      length += distancePerPoint;
+      path.style.strokeDasharray = [length,pathLength].join(' ');
+      if (length >= pathLength) {
+        clearInterval(timer);
+        timer = setInterval(increaseLineLength,100/drawFPS);
+      }
+    }
+
+    function stopDrawingPath(){
+      clearInterval(timer);
+      path.style.stroke = '';
+      path.style.strokeDasharray = '';
+    }
+    
+    function dist(x1, x2, y1, y2){
+      return Math.sqrt( (x2-=x1)*x2 + (y2-=y1)*y2 );
+    }
+  </script>
+</html>
+
